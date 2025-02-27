@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:project2/screens/company_home_screen.dart';
-import 'package:project2/screens/customer_home_screen.dart';
-import 'package:project2/screens/login_screen.dart';
+import 'package:project2/screens/company/home/view/company_home_screen.dart';
+import 'package:project2/screens/customer/home/view/customer_home_screen.dart';
+import 'package:project2/screens/auth/register_screen.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  String? accountTypeController;
   bool _obscureText = true;
 
   @override
@@ -37,9 +35,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 30),
+                const SizedBox(height: 50),
                 const Text(
-                  'Kayıt Ol',
+                  'Hoş Geldiniz',
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
@@ -48,44 +46,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SizedBox(height: 10),
                 const Text(
-                  'Yeni hesap oluşturun',
+                  'Hesabınıza giriş yapın',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.grey,
                   ),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 50),
                 Form(
                   key: _formKey,
                   child: Column(
                     children: [
-                      TextFormField(
-                        controller: nameController,
-                        decoration: InputDecoration(
-                          labelText: 'Ad Soyad',
-                          hintText: 'Adınız ve Soyadınız',
-                          prefixIcon: const Icon(Icons.person_outline),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: Colors.grey),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide:
-                                const BorderSide(color: Color(0xFF1565C0)),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Ad Soyad giriniz';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 20),
                       TextFormField(
                         controller: emailController,
                         decoration: InputDecoration(
@@ -107,7 +78,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'E-posta adresi giriniz';
+                            return 'E-posta giriniz';
                           }
                           return null;
                         },
@@ -151,42 +122,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 20),
-                      DropdownButtonFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Hesap Türü',
-                          prefixIcon: const Icon(Icons.business_outlined),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: Colors.grey),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide:
-                                const BorderSide(color: Color(0xFF1565C0)),
-                          ),
-                        ),
-                        items: const [
-                          DropdownMenuItem(
-                              value: 'company', child: Text('Şirket')),
-                          DropdownMenuItem(
-                              value: 'customer', child: Text('Müşteri')),
-                        ],
-                        onChanged: (value) {
-                          if (value != null) {
-                            accountTypeController = value;
-                          }
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Hesap türü seçiniz';
-                          }
-                          return null;
-                        },
-                      ),
                     ],
                   ),
                 ),
@@ -194,15 +129,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              accountTypeController == "company"
-                                  ? const CompanyHomeScreen()
-                                  : const CustomerHomeScreen(),
-                        ),
-                      );
+                      if (emailController.text == 'company' &&
+                          passwordController.text == "123456") {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CompanyHomeScreen(),
+                          ),
+                        );
+                      } else if (emailController.text == 'customer' &&
+                          passwordController.text == "123456") {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CustomerHomeScreen(),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Hatalı kullanıcı bilgileri')),
+                        );
+                      }
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -214,7 +162,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     elevation: 2,
                   ),
                   child: const Text(
-                    'Kayıt Ol',
+                    'Giriş Yap',
                     style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
@@ -225,12 +173,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
+                          builder: (context) => const RegisterScreen(),
                         ),
                       );
                     },
                     child: const Text(
-                      'Hesabınız var mı? Giriş yapın',
+                      'Hesabınız yok mu? Kayıt olun',
                       style: TextStyle(
                         color: Color(0xFF1565C0),
                         fontSize: 15,

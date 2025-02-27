@@ -1,5 +1,8 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:project2/screens/splash_screen.dart';
+import 'package:project2/screens/company/customer/view/customer_screen.dart';
+
+import 'package:project2/screens/splash/view/splash_screen.dart';
 
 class CompanyHomeScreen extends StatelessWidget {
   const CompanyHomeScreen({super.key});
@@ -53,8 +56,8 @@ class CompanyHomeScreen extends StatelessWidget {
               crossAxisCount: 2,
               crossAxisSpacing: 20,
               mainAxisSpacing: 20,
-              children: const [
-                DashboardCard(
+              children: [
+                const DashboardCard(
                   icon: Icons.assignment_outlined,
                   title: 'Projeler',
                   color: Color(0xFF1565C0),
@@ -63,16 +66,24 @@ class CompanyHomeScreen extends StatelessWidget {
                 DashboardCard(
                   icon: Icons.people_outline,
                   title: 'Müşteriler',
-                  color: Color(0xFF4CAF50),
+                  color: const Color(0xFF4CAF50),
                   subtitle: '48 Müşteri',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CustomerScreen(),
+                      ),
+                    );
+                  },
                 ),
-                DashboardCard(
+                const DashboardCard(
                   icon: Icons.bar_chart_outlined,
                   title: 'Raporlar',
                   color: Color(0xFFFFA726),
                   subtitle: 'Aylık Rapor',
                 ),
-                DashboardCard(
+                const DashboardCard(
                   icon: Icons.settings_outlined,
                   title: 'Ayarlar',
                   color: Color(0xFF7E57C2),
@@ -92,6 +103,7 @@ class DashboardCard extends StatelessWidget {
   final String title;
   final Color color;
   final String subtitle;
+  final VoidCallback? onTap;
 
   const DashboardCard({
     super.key,
@@ -99,6 +111,7 @@ class DashboardCard extends StatelessWidget {
     required this.title,
     required this.color,
     required this.subtitle,
+    this.onTap,
   });
 
   @override
@@ -109,7 +122,7 @@ class DashboardCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       child: InkWell(
-        onTap: () {},
+        onTap: onTap,
         borderRadius: BorderRadius.circular(15),
         child: Container(
           padding: const EdgeInsets.all(15),

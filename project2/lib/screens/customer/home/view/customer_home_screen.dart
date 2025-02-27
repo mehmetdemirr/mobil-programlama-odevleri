@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project2/screens/login_screen.dart';
-import 'package:project2/screens/splash_screen.dart';
+import 'package:project2/screens/splash/view/splash_screen.dart';
 
 class CustomerHomeScreen extends StatelessWidget {
   const CustomerHomeScreen({super.key});
