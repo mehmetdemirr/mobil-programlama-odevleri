@@ -103,7 +103,12 @@ class _EditCustomerScreenState extends State<EditCustomerScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text('Değişiklikleri Kaydet'),
+                child: Text(
+                  'Değişiklikleri Kaydet',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Colors.white,
+                      ),
+                ),
               ),
             ],
           ),

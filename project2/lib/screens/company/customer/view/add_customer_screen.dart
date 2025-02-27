@@ -91,7 +91,12 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text('Müşteri Ekle'),
+                child: Text(
+                  'Müşteri Ekle',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Colors.white,
+                      ),
+                ),
               ),
             ],
           ),

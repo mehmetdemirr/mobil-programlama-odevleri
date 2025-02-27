@@ -313,7 +313,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
           ),
           TextButton(
             onPressed: () {
-              // TODO: Silme işlemi implement edilecek
+              setState(() => _customers.remove(customer));
               Navigator.pop(context);
             },
             child: const Text(
