@@ -138,26 +138,27 @@ class _CustomerScreenState extends State<CustomerScreen> {
             ),
           ),
           Expanded(
-            child: isDesktop
-                ? GridView.builder(
-                    padding: const EdgeInsets.all(16),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 2,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                    ),
-                    itemCount: _filteredCustomers.length,
-                    itemBuilder: (context, index) =>
-                        _buildCustomerCard(_filteredCustomers[index]),
-                  )
-                : ListView.builder(
-                    itemCount: _filteredCustomers.length,
-                    itemBuilder: (context, index) =>
-                        _buildCustomerListItem(_filteredCustomers[index]),
-                  ),
-          ),
+              child: MediaQuery.of(context).size.width >= 600
+                  ? GridView.builder(
+                      padding: const EdgeInsets.all(16),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount:
+                            MediaQuery.of(context).size.width > 1200 ? 3 : 2,
+                        childAspectRatio:
+                            MediaQuery.of(context).size.width / (2 * 250),
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                      ),
+                      itemCount: _filteredCustomers.length,
+                      itemBuilder: (context, index) => SizedBox(
+                          height: 250,
+                          child: _buildCustomerCard(_filteredCustomers[index])),
+                    )
+                  : ListView.builder(
+                      itemCount: _filteredCustomers.length,
+                      itemBuilder: (context, index) =>
+                          _buildCustomerListItem(_filteredCustomers[index]),
+                    )),
         ],
       ),
     );
@@ -186,6 +187,21 @@ class _CustomerScreenState extends State<CustomerScreen> {
                     ),
                   ),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () =>
+                          _showEditCustomerDialog(context, customer),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () =>
+                          _showDeleteConfirmation(context, customer),
+                    ),
+                  ],
+                ),
                 _buildStatusChip(customer.status),
               ],
             ),
@@ -204,20 +220,6 @@ class _CustomerScreenState extends State<CustomerScreen> {
                 const Icon(Icons.phone, size: 16),
                 const SizedBox(width: 8),
                 Text(customer.phone),
-              ],
-            ),
-            const Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () => _showEditCustomerDialog(context, customer),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () => _showDeleteConfirmation(context, customer),
-                ),
               ],
             ),
           ],
