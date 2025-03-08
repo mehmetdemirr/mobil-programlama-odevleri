@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project2/screens/company/bottom_navigation/view/bottom_navigation_screen.dart';
 import 'package:project2/screens/company/home/view/company_home_screen.dart';
 import 'package:project2/screens/customer/home/view/customer_home_screen.dart';
 import 'package:project2/screens/auth/register_screen.dart';
@@ -12,8 +13,10 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController emailController =
+      TextEditingController(text: "company");
+  final TextEditingController passwordController =
+      TextEditingController(text: "123456");
   bool _obscureText = true;
 
   @override
@@ -134,7 +137,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const CompanyHomeScreen(),
+                            builder: (context) =>
+                                const CompanyBottomNavigationScreen(),
                           ),
                         );
                       } else if (emailController.text == 'customer' &&
