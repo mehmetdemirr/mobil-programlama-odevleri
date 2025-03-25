@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project4/screens/product/model/product_model.dart';
 import 'package:project4/screens/product/view/add_product_screen.dart';
+import 'package:project4/screens/product/view/filter_dialog_widget.dart';
 import 'package:project4/screens/product/view/product_detail_screen.dart';
 import 'package:project4/screens/product/viewmodel/product_view_model.dart';
 import 'package:provider/provider.dart';
@@ -173,45 +174,46 @@ class _ProductListScreenState extends State<ProductListScreen> {
   void _showSortDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            backgroundColor: Colors.white,
-            title: const Text(
-              'Sırala',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ListTile(
-                  title: const Text(
-                    'İsme göre (A-Z)',
-                    style: TextStyle(color: Colors.blueAccent),
-                  ),
-                  onTap: () {
-                    context.read<ProductProvider>().sortProducts(
-                      'title',
-                      'asc',
-                    );
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: const Text(
-                    'Fiyata göre (Artan)',
-                    style: TextStyle(color: Colors.blueAccent),
-                  ),
-                  onTap: () {
-                    context.read<ProductProvider>().sortProducts(
-                      'price',
-                      'asc',
-                    );
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            ),
-          ),
+      builder: (context) => FilterDialog(),
+
+      // AlertDialog(
+      //   backgroundColor: Colors.white,
+      //   title: const Text(
+      //     'Filtrele',
+      //     style: TextStyle(fontWeight: FontWeight.bold),
+      //   ),
+      //   content: Column(
+      //     mainAxisSize: MainAxisSize.min,
+      //     children: [
+      //       // ListTile(
+      //       //   title: const Text(
+      //       //     'İsme göre (A-Z)',
+      //       //     style: TextStyle(color: Colors.blueAccent),
+      //       //   ),
+      //       //   onTap: () {
+      //       //     context.read<ProductProvider>().sortProducts(
+      //       //       'title',
+      //       //       'asc',
+      //       //     );
+      //       //     Navigator.pop(context);
+      //       //   },
+      //       // ),
+      //       // ListTile(
+      //       //   title: const Text(
+      //       //     'Fiyata göre (Artan)',
+      //       //     style: TextStyle(color: Colors.blueAccent),
+      //       //   ),
+      //       //   onTap: () {
+      //       //     context.read<ProductProvider>().sortProducts(
+      //       //       'price',
+      //       //       'asc',
+      //       //     );
+      //       //     Navigator.pop(context);
+      //       //   },
+      //       // ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 
