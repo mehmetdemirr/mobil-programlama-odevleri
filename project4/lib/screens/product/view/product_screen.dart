@@ -149,7 +149,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
           horizontal: 16,
         ),
         title: Text(
-          product.title,
+          product.title ?? "-",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
         subtitle: Text(

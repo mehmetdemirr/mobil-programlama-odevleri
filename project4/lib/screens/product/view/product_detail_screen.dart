@@ -50,7 +50,7 @@ class ProductDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              product.title,
+              product.title ?? "-",
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: 8),
@@ -61,7 +61,7 @@ class ProductDetailScreen extends StatelessWidget {
               ).textTheme.titleLarge?.copyWith(color: Colors.green),
             ),
             const SizedBox(height: 16),
-            Text(product.description),
+            Text(product.description ?? "--"),
             const SizedBox(height: 16),
             Text('Kategori: ${product.category}'),
             const SizedBox(height: 24),
