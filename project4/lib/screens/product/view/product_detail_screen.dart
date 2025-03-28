@@ -93,6 +93,7 @@ class ProductDetailScreen extends StatelessWidget {
 
     if (updatedProduct != null) {
       final provider = context.read<ProductProvider>();
+      // updatedProduct.id = productId;
       await provider.updateProduct(productId, updatedProduct);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Ürün başarıyla güncellendi')),

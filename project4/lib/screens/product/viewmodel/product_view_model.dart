@@ -90,7 +90,7 @@ class ProductProvider with ChangeNotifier {
     return null;
   }
 
-  Future<Product> updateProduct(int id, Product product) async {
+  Future<Product?> updateProduct(int id, Product product) async {
     try {
       final updatedProduct = await _service.updateProduct(id, product);
       final index = _products.indexWhere((p) => p.id == id);
@@ -101,8 +101,9 @@ class ProductProvider with ChangeNotifier {
       return updatedProduct;
     } catch (e) {
       debugPrint("Error updating product: $e");
-      rethrow;
+      print("e:$e");
     }
+    return null;
   }
 
   Future<void> deleteProduct(int id) async {
