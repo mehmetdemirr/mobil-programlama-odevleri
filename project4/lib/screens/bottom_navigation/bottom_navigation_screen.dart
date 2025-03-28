@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project4/screens/bottom_navigation/navigation_viewmodel.dart';
 import 'package:project4/screens/category/category_screen.dart';
-import 'package:project4/screens/home/home_screen.dart';
+import 'package:project4/screens/person/view/person_screen.dart';
 import 'package:project4/screens/product/view/product_screen.dart';
 import 'package:project4/screens/profile/profile_screen.dart';
 import 'package:project4/screens/statistic/statistic_screen.dart';
@@ -12,6 +12,7 @@ class BottomNavigationScreen extends StatelessWidget {
     StatsScreen(),
     ProductListScreen(),
     CategoryScreen(),
+    PersonScreen(),
     ProfileScreen(),
   ];
 
@@ -42,6 +43,7 @@ class BottomNavigationScreen extends StatelessWidget {
             icon: Icon(Icons.category),
             label: 'Kategoriler',
           ),
+          BottomNavigationBarItem(icon: Icon(Icons.group), label: 'Müşteriler'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ],
       ),

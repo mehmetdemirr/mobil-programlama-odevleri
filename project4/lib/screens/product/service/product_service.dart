@@ -69,7 +69,7 @@ class ProductService {
   Future<Product> addProduct(Product product) async {
     final response = await _dio.post(
       'products/add',
-      data: {"": ""},
+      data: product.toJson(),
       options: Options(contentType: 'application/json'),
     );
     return Product.fromJson(response.data);
@@ -78,7 +78,7 @@ class ProductService {
   Future<Product> updateProduct(int id, Product product) async {
     final response = await _dio.put(
       'products/$id',
-      data: {},
+      data: product.toJson(),
       options: Options(contentType: 'application/json'),
     );
     return Product.fromJson(response.data);

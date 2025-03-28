@@ -17,12 +17,6 @@ class _FilterDialogState extends State<FilterDialog> {
 
   // Sıralama kriterleri
   final List<String> sortFields = ['title', 'price', 'rating', 'stock'];
-  final Map<String, String> sortFieldLabels = {
-    'title': 'Ürün Adı',
-    'price': 'Fiyat',
-    'rating': 'Değerlendirme',
-    'stock': 'Stok Adedi',
-  };
 
   // Operator'ler için değerler
   List<String> operators = ['='];

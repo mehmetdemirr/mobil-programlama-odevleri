@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project4/screens/bottom_navigation/navigation_viewmodel.dart';
+import 'package:project4/screens/person/viewmodel/person_viewmodel.dart';
 import 'package:project4/screens/product/viewmodel/product_view_model.dart';
 import 'package:project4/screens/splash/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => NavigationProvider()),
         ChangeNotifierProvider(create: (context) => ProductProvider()),
+        ChangeNotifierProvider(create: (context) => PersonViewModel()),
       ],
       child: const MyApp(),
     ),
