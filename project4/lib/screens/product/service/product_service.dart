@@ -89,3 +89,8 @@ class ProductService {
     return Product.fromJson(response.data);
   }
 }
+
+
+//alan kısmına 
+// 10 tane (isim yaş vs toplam 11 tane )
+//operatörde  toplam 11 yaş 5 isimde 4 toplam 9 tane şimdilik burası 11 olacak min 

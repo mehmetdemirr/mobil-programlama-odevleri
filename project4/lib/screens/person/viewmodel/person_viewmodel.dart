@@ -7,7 +7,15 @@ class PersonViewModel extends ChangeNotifier {
   List<Person> _people = [];
   List<Person> get people => _people;
 
+  bool isLoading = false;
+
+  void changeLoading(bool value) {
+    isLoading = value;
+    notifyListeners();
+  }
+
   Future<void> fetchPeople([Map<String, dynamic>? filters]) async {
+    changeLoading(true);
     try {
       final response = await _dio.get(
         'http://localhost:8000/api/people/filter',
@@ -15,13 +23,12 @@ class PersonViewModel extends ChangeNotifier {
       );
 
       _people =
-          (response.data as List)
-              .map((item) => Person(name: item['name'], age: item['age']))
-              .toList();
+          (response.data as List).map((item) => Person.fromJson(item)).toList();
 
       notifyListeners();
     } catch (e) {
       print('Hata oluştu: $e');
     }
+    changeLoading(false);
   }
 }

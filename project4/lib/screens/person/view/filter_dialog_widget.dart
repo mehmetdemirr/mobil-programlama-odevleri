@@ -15,9 +15,39 @@ class _PersonFilterDialogState extends State<PersonFilterDialog> {
   String? _valueInput;
   final List<Map<String, dynamic>> _filters = [];
 
-  Map<String, List<String>> fieldOperators = {
-    'name': ['contains', 'startswith', 'endswith', 'eq'],
-    'age': ['>', '>=', '<', '<=', '=='],
+  final Map<String, List<String>> fieldOperators = {
+    'name': ['contains', 'startswith', 'endswith', 'eq', 'neq'],
+    'surname': ['contains', 'startswith', 'endswith', 'eq', 'neq'],
+    'age': ['>', '>=', '<', '<=', '==', '!='],
+    'tc': ['==', '!=', 'startswith', 'endswith'],
+    'email': ['contains', 'eq', 'neq'],
+    'birth_date': ['>', '>=', '<', '<=', '==', '!='],
+    'gender': ['=='],
+    'marital_status': ['=='],
+    'profession': ['contains', 'eq', 'neq'],
+    'city': ['contains', 'eq', 'neq'],
+    'country': ['contains', 'eq', 'neq'],
+  };
+
+  final Map<String, String> fieldLabels = {
+    'name': 'İsim',
+    'surname': 'Soyadı',
+    'age': 'Yaş',
+    'tc': 'TC Kimlik No',
+    'email': 'E-Posta',
+    'birth_date': 'Doğum Tarihi',
+    'gender': 'Cinsiyet',
+    'marital_status': 'Medeni Hal',
+    'profession': 'Meslek',
+    'city': 'Şehir',
+    'country': 'Ülke',
+  };
+
+  final Map<String, TextInputType> inputTypes = {
+    'age': TextInputType.number,
+    'tc': TextInputType.number,
+    'birth_date': TextInputType.datetime,
+    'email': TextInputType.emailAddress,
   };
 
   @override
@@ -36,10 +66,10 @@ class _PersonFilterDialogState extends State<PersonFilterDialog> {
                   child: DropdownButtonFormField<String>(
                     value: _selectedField,
                     items:
-                        ['name', 'age'].map((field) {
+                        fieldLabels.keys.map((field) {
                           return DropdownMenuItem(
                             value: field,
-                            child: Text(field == 'name' ? 'İsim' : 'Yaş'),
+                            child: Text(fieldLabels[field]!),
                           );
                         }).toList(),
                     onChanged: (value) {
@@ -73,17 +103,8 @@ class _PersonFilterDialogState extends State<PersonFilterDialog> {
                 ),
               ],
             ),
-            TextFormField(
-              keyboardType:
-                  _selectedField == 'age'
-                      ? TextInputType.number
-                      : TextInputType.text,
-              onChanged: (value) => _valueInput = value,
-              decoration: InputDecoration(
-                labelText:
-                    _selectedField == 'age' ? 'Yaş Değeri' : 'İsim Değeri',
-              ),
-            ),
+            const SizedBox(height: 10),
+            _buildValueInput(),
             ElevatedButton(
               onPressed: _addFilter,
               child: const Text('Filtre Ekle'),
@@ -98,7 +119,9 @@ class _PersonFilterDialogState extends State<PersonFilterDialog> {
                   final filter = _filters[index];
                   return ListTile(
                     title: Text(
-                      "${filter['field']} ${filter['operator']} ${filter['value']}",
+                      "${fieldLabels[filter['field']]} "
+                      "${_getOperatorLabel(filter['operator'])} "
+                      "${filter['value']}",
                     ),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),
@@ -128,16 +151,87 @@ class _PersonFilterDialogState extends State<PersonFilterDialog> {
     );
   }
 
+  Widget _buildValueInput() {
+    if (_selectedField == 'gender') {
+      return DropdownButtonFormField<String>(
+        value: _valueInput,
+        items:
+            const ['E', 'K']
+                .map(
+                  (gender) => DropdownMenuItem(
+                    value: gender,
+                    child: Text(gender == 'E' ? 'Erkek' : 'Kadın'),
+                  ),
+                )
+                .toList(),
+        onChanged: (value) => setState(() => _valueInput = value),
+        decoration: const InputDecoration(labelText: 'Değer Seç'),
+      );
+    }
+
+    if (_selectedField == 'marital_status') {
+      return DropdownButtonFormField<String>(
+        value: _valueInput,
+        items:
+            const ['Bekar', 'Evli', 'Dul', 'Boşanmış']
+                .map(
+                  (status) =>
+                      DropdownMenuItem(value: status, child: Text(status)),
+                )
+                .toList(),
+        onChanged: (value) => setState(() => _valueInput = value),
+        decoration: const InputDecoration(labelText: 'Değer Seç'),
+      );
+    }
+
+    return TextFormField(
+      keyboardType: inputTypes[_selectedField] ?? TextInputType.text,
+      onChanged: (value) => _valueInput = value,
+      decoration: InputDecoration(
+        labelText:
+            _selectedField != null
+                ? '${fieldLabels[_selectedField!]} Değeri'
+                : 'Değer',
+      ),
+    );
+  }
+
+  String _getOperatorLabel(String op) {
+    return {
+          'contains': 'içerir',
+          'startswith': 'ile başlar',
+          'endswith': 'ile biter',
+          'eq': 'eşittir',
+          'neq': 'eşit değildir',
+          '>': 'büyüktür',
+          '>=': 'büyük eşittir',
+          '<': 'küçüktür',
+          '<=': 'küçük eşittir',
+          '==': 'eşittir',
+          '!=': 'eşit değildir',
+        }[op] ??
+        op;
+  }
+
   void _addFilter() {
     if (_selectedField == null ||
         _selectedOperator == null ||
         _valueInput == null)
       return;
 
+    // Validasyonlar
     if (_selectedField == 'age' && int.tryParse(_valueInput!) == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Lütfen geçerli bir yaş giriniz!')),
-      );
+      _showError('Lütfen geçerli bir yaş giriniz!');
+      return;
+    }
+
+    if (_selectedField == 'tc' && !_isValidTC(_valueInput!)) {
+      _showError('Geçerli bir TC Kimlik No giriniz (11 haneli)!');
+      return;
+    }
+
+    if (_selectedField == 'birth_date' && !_isValidDate(_valueInput!)) {
+      _showError('Geçerli bir tarih formatı giriniz (YYYY-AA-GG)!');
       return;
     }
 
@@ -145,33 +239,47 @@ class _PersonFilterDialogState extends State<PersonFilterDialog> {
       _filters.add({
         'field': _selectedField!,
         'operator': _selectedOperator!,
-        'value':
-            _selectedField == 'age' ? int.parse(_valueInput!) : _valueInput!,
+        'value': _getParsedValue(),
       });
-      _selectedField = null;
-      _selectedOperator = null;
-      _valueInput = null;
+      _resetSelections();
     });
   }
 
-  void _removeFilter(int index) {
-    setState(() {
-      _filters.removeAt(index);
-    });
+  dynamic _getParsedValue() {
+    if (_selectedField == 'age') return int.parse(_valueInput!);
+    if (_selectedField == 'tc') return _valueInput!;
+    if (_selectedField == 'birth_date') return _valueInput!;
+    return _valueInput!.toLowerCase();
   }
+
+  bool _isValidTC(String value) =>
+      value.length == 11 && int.tryParse(value) != null;
+  bool _isValidDate(String value) => DateTime.tryParse(value) != null;
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  void _resetSelections() {
+    _selectedField = null;
+    _selectedOperator = null;
+    _valueInput = null;
+  }
+
+  void _removeFilter(int index) => setState(() => _filters.removeAt(index));
 
   void _applyFilters(BuildContext context) {
     if (_filters.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('En az bir filtre eklemelisiniz!')),
-      );
+      _showError('En az bir filtre eklemelisiniz!');
       return;
     }
 
     final Map<String, dynamic> filters = {};
     for (var filter in _filters) {
-      filters[filter['field']] = {
-        'operator': filter['operator'],
+      filters[filter['field'] as String] = {
+        'operator': filter['operator'] as String,
         'value': filter['value'],
       };
     }
